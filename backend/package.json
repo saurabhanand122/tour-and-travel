@@ -1,7 +1,7 @@
 {
   "name": "jai-baba-backend",
   "version": "1.0.0",
-  "description": "Backend API server for Jai baba Tours  Tour and Travels website",
+  "description": "Backend API server for Jai baba Tours &  Tour and Travels website",
   "main": "src/server.js",
   "type": "module",
   "scripts": {

@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Health Check Route
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Jai baba Tours  Tour and Travels API' });
+  res.json({ message: 'Welcome to Jai baba Tours &  Tour and Travels API' });
 });
 
 // Routes

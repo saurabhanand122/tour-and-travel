@@ -106,7 +106,7 @@ export default function Home() {
             <span className={styles.titleHighlight}>Journeys & Adventures</span>
           </h1>
           <p className={styles.tagline}>
-            Explore exotic beaches, snowy mountains, and historic cities with Jai baba Tours  Tour and Travels. Custom packages tailored just for you.
+            Explore exotic beaches, snowy mountains, and historic cities with Jai baba Tours &  Tour and Travels. Custom packages tailored just for you.
           </p>
         </div>
 
@@ -178,7 +178,7 @@ export default function Home() {
         <div className={`${styles.section} container`} style={{ padding: 0 }}>
           <div className={styles.sectionHeader}>
             <span className={styles.sectionSubtitle}>Our Promises</span>
-            <h2 className={styles.sectionTitle}>Why Choose Jai baba Tours  Travels</h2>
+            <h2 className={styles.sectionTitle}>Why Choose Jai baba Tours &  Travels</h2>
             <p className={styles.sectionText}>
               We aim to make your travel experience smooth, comfortable, and absolutely delightful.
             </p>
@@ -267,7 +267,7 @@ export default function Home() {
             <span className={styles.quoteIcon}>“</span>
             <div className={styles.rating}>★★★★★</div>
             <p className={styles.comment}>
-              "Our family trip to Bali with Jai baba Tours  Travels was absolutely mind-blowing. The villa accommodations were premium and our tour driver was exceptionally kind."
+              "Our family trip to Bali with Jai baba Tours &  Travels was absolutely mind-blowing. The villa accommodations were premium and our tour driver was exceptionally kind."
             </p>
             <div className={styles.userProfile}>
               <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" alt="Sarah Connor" className={styles.userAvatar} />
@@ -297,7 +297,7 @@ export default function Home() {
             <span className={styles.quoteIcon}>“</span>
             <div className={styles.rating}>★★★★★</div>
             <p className={styles.comment}>
-              "Japan is complex to navigate, but Jai baba Tours  travels provided a seamless guide, JR passes, and restaurant recommendations that made the journey extremely easy!"
+              "Japan is complex to navigate, but Jai baba Tours &  travels provided a seamless guide, JR passes, and restaurant recommendations that made the journey extremely easy!"
             </p>
             <div className={styles.userProfile}>
               <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" alt="Alex Mercer" className={styles.userAvatar} />

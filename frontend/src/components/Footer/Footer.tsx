@@ -32,10 +32,10 @@ export const Footer = () => {
                 </linearGradient>
               </defs>
             </svg>
-            <span>Jai baba Tours  TRAVELS</span>
+            <span>Jai baba Tours &  TRAVELS</span>
           </Link>
           <p className={styles.brandDesc}>
-            Discover beautiful destinations, custom tour packages, and make unforgettable memories. Jai baba Tours  Tour and Travels is your reliable partner for planning perfect vacations.
+            Discover beautiful destinations, custom tour packages, and make unforgettable memories. Jai baba Tours &  Tour and Travels is your reliable partner for planning perfect vacations.
           </p>
           <div className={styles.socials}>
             <a href="#" className={styles.socialIcon} aria-label="Facebook">
@@ -116,7 +116,7 @@ export const Footer = () => {
       </div>
 
       <div className={`${styles.bottomBar} container`}>
-        <p>&copy; {new Date().getFullYear()} Jai baba Tours  Tour and Travels. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Jai baba Tours &  Tour and Travels. All rights reserved.</p>
         <div className={styles.bottomLinks}>
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
