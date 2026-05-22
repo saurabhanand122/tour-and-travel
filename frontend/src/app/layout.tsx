@@ -18,9 +18,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Jai baba Tours and Travels Tour and Travels | Premium Travel Agency",
-  description: "Plan your next dream holiday with Jai baba Tours and Travels Tour and Travels. Explore handpicked holiday packages, custom itineraries, and make unforgettable memories.",
-  keywords: "tour packages, vacation, holidays, travel agency, Jai baba Tours and Travels Travels, booking, explore, tourism",
+  title: "Jai baba Tours  Tour and Travels | Premium Travel Agency",
+  description: "Plan your next dream holiday with Jai baba Tours  Tour and Travels. Explore handpicked holiday packages, custom itineraries, and make unforgettable memories.",
+  keywords: "tour packages, vacation, holidays, travel agency, Jai baba Tours  Travels, booking, explore, tourism",
 };
 
 export default function RootLayout({

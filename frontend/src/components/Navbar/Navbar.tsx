@@ -40,7 +40,7 @@ export const Navbar = () => {
               </linearGradient>
             </defs>
           </svg>
-          <span>Jai baba Tours and Travels <span className={styles.logoHighlight}>TRAVELS</span></span>
+          <span>Jai baba Tours  <span className={styles.logoHighlight}>TRAVELS</span></span>
         </Link>
 
         <div className={styles.menuToggle} onClick={() => setMenuActive(!menuActive)}>

@@ -131,7 +131,7 @@ export default function ContactPage() {
           
           {submitted && (
             <div className={styles.successMessage}>
-              Thank you for contacting Jai baba Tours and Travels Tour and Travels! Your message has been sent successfully. We will get back to you shortly.
+              Thank you for contacting Jai baba Tours  Tour and Travels! Your message has been sent successfully. We will get back to you shortly.
             </div>
           )}
 
