@@ -1,0 +1,19 @@
+# Node modules
+backend/node_modules/
+frontend/node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+*.env
+
+# Next.js build output
+.next/
+out/
+
+# OS files
+.DS_Store
+Thumbs.db
