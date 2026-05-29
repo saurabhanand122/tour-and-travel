@@ -214,7 +214,7 @@
   color: var(--text-secondary);
   font-size: 0.95rem;
   line-height: 1.6;
-  background: rgba(7, 10, 19, 0.2);
+  background: var(--input-bg);
 }
 
 /* Inclusions/Exclusions */
@@ -367,7 +367,7 @@
   font-size: 1.5rem;
   font-weight: 800;
   font-family: var(--font-display);
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .submitBtn {

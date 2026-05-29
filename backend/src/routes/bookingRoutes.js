@@ -4,6 +4,7 @@ import {
   getMyBookings,
   getAllBookings,
   updateBookingStatus,
+  deleteBooking,
 } from '../controllers/bookingController.js';
 import { protect, admin } from '../middleware/auth.js';
 
@@ -15,6 +16,9 @@ router.route('/')
 
 router.route('/my-bookings')
   .get(protect, getMyBookings);
+
+router.route('/:id')
+  .delete(protect, admin, deleteBooking);
 
 router.route('/:id/status')
   .patch(protect, admin, updateBookingStatus);

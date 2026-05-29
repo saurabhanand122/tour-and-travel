@@ -1,9 +1,16 @@
 import express from 'express';
-import { addReview } from '../controllers/reviewController.js';
-import { protect } from '../middleware/auth.js';
+import { addReview, getAllReviews, deleteReview } from '../controllers/reviewController.js';
+import { protect, admin } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/:tourId', protect, addReview);
+router.route('/')
+  .get(protect, admin, getAllReviews);
+
+router.route('/:id')
+  .delete(protect, admin, deleteReview);
+
+router.route('/:tourId')
+  .post(protect, addReview);
 
 export default router;

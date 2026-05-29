@@ -13,6 +13,8 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   loading: boolean;
+  isOffline: boolean;
+  setIsOffline: (val: boolean) => void;
   login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
   register: (name: string, email: string, password: string) => Promise<{ success: boolean; message?: string }>;
   logout: () => void;
@@ -26,6 +28,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isOffline, setIsOffline] = useState(false);
 
   // Load user from localStorage on mount
   useEffect(() => {
@@ -38,26 +41,36 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setToken(storedToken);
           setUser(JSON.parse(storedUser));
 
-          // Option: verify token with backend
-          const res = await fetch(`${API_URL}/auth/profile`, {
-            headers: {
-              Authorization: `Bearer ${storedToken}`,
-            },
-          });
+          if (isOffline) {
+            setLoading(false);
+            return;
+          }
 
-          if (res.ok) {
-            const data = await res.json();
-            if (data.success) {
-              setUser(data);
-              localStorage.setItem('jaibaba_user', JSON.stringify(data));
+          // Option: verify token with backend
+          try {
+            const res = await fetch(`${API_URL}/auth/profile`, {
+              headers: {
+                Authorization: `Bearer ${storedToken}`,
+              },
+            });
+
+            if (res.ok) {
+              const data = await res.json();
+              if (data.success) {
+                setUser(data);
+                localStorage.setItem('jaibaba_user', JSON.stringify(data));
+              }
+            } else {
+              // Token expired or invalid
+              logout();
             }
-          } else {
-            // Token expired or invalid
-            logout();
+          } catch (fetchErr) {
+            setIsOffline(true);
+            console.warn('Backend server is offline. Enabling client-side fallback mode.');
           }
         }
       } catch (err) {
-        console.error('Error loading stored auth data:', err);
+        console.warn('Error loading stored auth data:', err);
       } finally {
         setLoading(false);
       }
@@ -95,7 +108,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return { success: false, message: data.message || 'Login failed' };
       }
     } catch (err) {
-      console.error('Login error:', err);
+      console.warn('Login error:', err);
+      setIsOffline(true);
       return { success: false, message: 'Server connection failed. Is the API running?' };
     }
   };
@@ -129,7 +143,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return { success: false, message: data.message || 'Registration failed' };
       }
     } catch (err) {
-      console.error('Registration error:', err);
+      console.warn('Registration error:', err);
+      setIsOffline(true);
       return { success: false, message: 'Server connection failed. Is the API running?' };
     }
   };
@@ -143,7 +158,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, isOffline, setIsOffline, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

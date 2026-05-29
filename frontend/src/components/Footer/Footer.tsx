@@ -35,16 +35,16 @@ export const Footer = () => {
             <span>Jai baba Tours &  TRAVELS</span>
           </Link>
           <p className={styles.brandDesc}>
-            Discover beautiful destinations, custom tour packages, and make unforgettable memories. Jai baba Tours &  Tour and Travels is your reliable partner for planning perfect vacations.
+            Discover beautiful destinations, custom tour packages, and make unforgettable memories. Jai baba Tours & Travels is your reliable partner for planning perfect vacations.
           </p>
           <div className={styles.socials}>
-            <a href="#" className={styles.socialIcon} aria-label="Facebook">
+            <a href="https://whatsapp.com/channel/0029VbBf7yw1CYoJOv9n5Y0C" className={styles.socialIcon} aria-label="whatsapp">
               <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8H7v3h2v9h3v-9h3l.5-3H12V6.5c0-.9.2-1.2 1-1.2h2V2h-3c-3 0-5 1.8-5 4.8V8z"/></svg>
             </a>
-            <a href="#" className={styles.socialIcon} aria-label="Instagram">
+            <a href="https://www.instagram.com/jaibabatours?igsh=d3c5ZDR1cm05eHpk" target="_blank" className={styles.socialIcon} aria-label="Instagram">
               <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.1c3.2 0 3.6 0 4.9.1 1.2.1 1.8.3 2.2.5.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .5 2.2.1 1.3.1 1.6.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.8-.5 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.5-1.3.1-1.6.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.3-2.2-.5-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.5-2.2-.1-1.3-.1-1.6-.1-4.9s0-3.6.1-4.9c.1-1.2.3-1.8.5-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.5 1.3-.1 1.6-.1 4.9-.1zM12 0C8.7 0 8.3 0 7 0 5.7.1 4.8.3 4 .6c-.8.3-1.5.7-2.1 1.4C1.2 2.7.8 3.4.5 4.2c-.3.8-.5 1.7-.6 3C0 8.5 0 8.9 0 12s0 3.5.1 4.8c.1 1.3.3 2.2.6 3 .3.8.7 1.5 1.4 2.1.6.6 1.4 1.1 2.1 1.4.8.3 1.7.5 3 .6 1.3.1 1.7.1 4.8.1s3.5 0 4.8-.1c1.3-.1 2.2-.3 3-.6.8-.3 1.5-.7 2.1-1.4.6-.6 1.1-1.4 1.4-2.1.3-.8.5-1.7.6-3 .1-1.3.1-1.7.1-4.8s0-3.5-.1-4.8c-.1-1.3-.3-2.2-.6-3-.3-.8-.7-1.5-1.4-2.1-.6-.6-1.4-1.1-2.1-1.4-.8-.3-1.7-.5-3-.6-1.3-.1-1.7-.1-4.8-.1zM12 5.8a6.2 6.2 0 100 12.4 6.2 6.2 0 000-12.4zm0 10.2a4 4 0 110-8 4 4 0 010 8zm6.4-11.4a1.4 1.4 0 100 2.8 1.4 1.4 0 000-2.8z"/></svg>
             </a>
-            <a href="#" className={styles.socialIcon} aria-label="Twitter">
+            <a href="#" className={styles.socialIcon} aria-label="">
               <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.6c-.9.4-1.8.6-2.8.7 1-.6 1.8-1.6 2.2-2.7-1 .6-2 1-3 1.2-1-1-2.2-1.6-3.6-1.6-2.7 0-5 2.2-5 5v1.1C7.7 8.2 4.1 6.3 1.7 3.3c-.4.7-.6 1.5-.6 2.4 0 1.7.9 3.2 2.2 4.1-.8 0-1.6-.2-2.2-.6v.1c0 2.4 1.7 4.4 3.9 4.9-.4.1-.9.2-1.4.2-.3 0-.7 0-1-.1.6 2 2.5 3.5 4.7 3.5-1.7 1.4-3.9 2.2-6.3 2.2-.4 0-.8 0-1.2-.1 2.2 1.4 4.9 2.2 7.7 2.2 9.3 0 14.3-7.7 14.3-14.3v-.7c1-.7 1.8-1.5 2.5-2.5z"/></svg>
             </a>
           </div>

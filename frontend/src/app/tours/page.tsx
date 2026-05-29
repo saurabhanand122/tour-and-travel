@@ -4,7 +4,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { TourCard, TourType } from '@/components/TourCard/TourCard';
 import { Spinner } from '@/components/Spinner/Spinner';
-import { API_URL } from '@/context/AuthContext';
+import { API_URL, useAuth } from '@/context/AuthContext';
 import styles from './tours.module.css';
 
 const fallbackAllTours: TourType[] = [
@@ -91,6 +91,7 @@ const fallbackAllTours: TourType[] = [
 const ToursListContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { isOffline, setIsOffline } = useAuth();
 
   // Filters state from URL query
   const urlDestination = searchParams.get('destination') || '';
@@ -114,6 +115,11 @@ const ToursListContent = () => {
   useEffect(() => {
     const fetchFilteredTours = async () => {
       setLoading(true);
+      if (isOffline) {
+        applyClientSideFilters();
+        setLoading(false);
+        return;
+      }
       const params = new URLSearchParams();
       if (urlDestination) params.append('destination', urlDestination);
       if (urlDuration) params.append('duration', urlDuration);
@@ -133,7 +139,8 @@ const ToursListContent = () => {
           applyClientSideFilters();
         }
       } catch (err) {
-        console.error('Failed to fetch filtered tours, filtering locally:', err);
+        setIsOffline(true);
+        console.warn('Backend server unreachable. Applying client-side filters on fallback tours.');
         applyClientSideFilters();
       } finally {
         setLoading(false);
@@ -158,7 +165,7 @@ const ToursListContent = () => {
     };
 
     fetchFilteredTours();
-  }, [urlDestination, urlDuration, urlMaxPrice]);
+  }, [urlDestination, urlDuration, urlMaxPrice, isOffline, setIsOffline]);
 
   const applyFilters = (e: React.FormEvent) => {
     e.preventDefault();

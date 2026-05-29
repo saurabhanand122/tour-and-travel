@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { TourCard, TourType } from '@/components/TourCard/TourCard';
 import { Spinner } from '@/components/Spinner/Spinner';
-import { API_URL } from '@/context/AuthContext';
+import { API_URL, useAuth } from '@/context/AuthContext';
 import styles from './page.module.css';
 
 // Hardcoded fallback data in case backend is offline
@@ -52,6 +52,7 @@ const fallbackTours: TourType[] = [
 
 export default function Home() {
   const router = useRouter();
+  const { isOffline, setIsOffline } = useAuth();
   const [tours, setTours] = useState<TourType[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -62,6 +63,11 @@ export default function Home() {
 
   useEffect(() => {
     const fetchFeaturedTours = async () => {
+      if (isOffline) {
+        setTours(fallbackTours);
+        setLoading(false);
+        return;
+      }
       try {
         const res = await fetch(`${API_URL}/tours?featured=true`);
         if (res.ok) {
@@ -75,7 +81,8 @@ export default function Home() {
           setTours(fallbackTours);
         }
       } catch (err) {
-        console.error('Failed to fetch featured tours, using fallback:', err);
+        setIsOffline(true);
+        console.warn('Backend server unreachable. Using local fallback tours.');
         setTours(fallbackTours);
       } finally {
         setLoading(false);
@@ -83,7 +90,7 @@ export default function Home() {
     };
 
     fetchFeaturedTours();
-  }, []);
+  }, [isOffline, setIsOffline]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

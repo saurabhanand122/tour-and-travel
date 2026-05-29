@@ -281,7 +281,7 @@ const fallbackDetailTours: TourDetailType[] = [
 export default function TourDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { user, token } = useAuth();
+  const { user, token, isOffline, setIsOffline } = useAuth();
   
   const tourId = params.id as string;
 
@@ -315,6 +315,11 @@ export default function TourDetailPage() {
   }, [user]);
 
   const fetchTourData = async () => {
+    if (isOffline) {
+      loadFallback();
+      setLoading(false);
+      return;
+    }
     try {
       const res = await fetch(`${API_URL}/tours/${tourId}`);
       if (res.ok) {
@@ -329,7 +334,8 @@ export default function TourDetailPage() {
         loadFallback();
       }
     } catch (err) {
-      console.error('Fetch tour detail error, using fallback:', err);
+      setIsOffline(true);
+      console.warn('Backend server unreachable. Using local tour details fallback.');
       loadFallback();
     } finally {
       setLoading(false);
@@ -353,7 +359,7 @@ export default function TourDetailPage() {
     if (tourId) {
       fetchTourData();
     }
-  }, [tourId]);
+  }, [tourId, isOffline, setIsOffline]);
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

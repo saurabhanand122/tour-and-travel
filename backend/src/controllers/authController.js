@@ -98,3 +98,84 @@ export const getUserProfile = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// @desc    Get all users
+// @route   GET /api/auth/users
+// @access  Private/Admin
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}).sort({ createdAt: -1 });
+    return res.json({
+      success: true,
+      count: users.length,
+      data: users,
+    });
+  } catch (error) {
+    console.error('Get All Users Error:', error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Update user role
+// @route   PATCH /api/auth/users/:id
+// @access  Private/Admin
+export const updateUserRole = async (req, res) => {
+  try {
+    const { role } = req.body;
+
+    if (!role || !['user', 'admin'].includes(role)) {
+      return res.status(400).json({ success: false, message: 'Please provide a valid role (user or admin).' });
+    }
+
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    user.role = role;
+    await user.save();
+
+    return res.json({
+      success: true,
+      message: 'User role updated successfully.',
+      data: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error('Update User Role Error:', error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Delete a user
+// @route   DELETE /api/auth/users/:id
+// @access  Private/Admin
+export const deleteUser = async (req, res) => {
+  try {
+    // Prevent self deletion
+    if (req.params.id === req.user._id.toString()) {
+      return res.status(400).json({ success: false, message: 'Admins cannot delete their own profile.' });
+    }
+
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    await user.deleteOne();
+
+    return res.json({
+      success: true,
+      message: 'User deleted successfully.',
+    });
+  } catch (error) {
+    console.error('Delete User Error:', error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};

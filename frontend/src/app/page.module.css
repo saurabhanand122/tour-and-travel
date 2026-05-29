@@ -37,6 +37,7 @@
   line-height: 1.2;
   margin-bottom: 1.5rem;
   font-family: var(--font-display);
+  color: #ffffff;
 }
 
 .titleHighlight {
@@ -46,7 +47,7 @@
 }
 
 .tagline {
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 1.2rem;
   max-width: 600px;
   margin: 0 auto;

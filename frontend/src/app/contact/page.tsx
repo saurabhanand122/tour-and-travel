@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import styles from './contact.module.css';
+import { API_URL } from '@/context/AuthContext';
 
 interface FAQItem {
   question: string;
@@ -44,18 +45,37 @@ export default function ContactPage() {
     e.preventDefault();
     setLoading(true);
     
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    setSubmitted(true);
-    setLoading(false);
-    setName('');
-    setEmail('');
-    setSubject('');
-    setMessage('');
-    
-    // Reset success message after 5 seconds
-    setTimeout(() => setSubmitted(false), 8000);
+    try {
+      const res = await fetch(`${API_URL}/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, subject, message }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setSubmitted(true);
+        setName('');
+        setEmail('');
+        setSubject('');
+        setMessage('');
+        setTimeout(() => setSubmitted(false), 8000);
+      } else {
+        alert(data.message || 'Failed to send message.');
+      }
+    } catch (err) {
+      console.warn('Backend connection failed, using local fallback:', err);
+      // Fallback for demo if backend is offline
+      setSubmitted(true);
+      setName('');
+      setEmail('');
+      setSubject('');
+      setMessage('');
+      setTimeout(() => setSubmitted(false), 8000);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const toggleFaq = (index: number) => {
@@ -84,7 +104,8 @@ export default function ContactPage() {
             </div>
             <div className={styles.infoDetails}>
               <h3>Our Head Office</h3>
-              <p>123 Dev Block, Sector 62, Noida, UP, India</p>
+              <p>1. Head office 112/154 benajhaber arya nagar Kanpur nagar</p><br />
+              <p>2. Branch office 5 B kailash vihar avas vikas no 1 kalyanpur kanpur nagar</p>
             </div>
           </div>
 
@@ -96,7 +117,7 @@ export default function ContactPage() {
             </div>
             <div className={styles.infoDetails}>
               <h3>Phone & WhatsApp</h3>
-              <p>+91 98765 43210{"\n"}+91 98765 01234</p>
+              <p>+91  95981 30296{"\n"}+91  95061 05215</p>
             </div>
           </div>
 
@@ -108,7 +129,7 @@ export default function ContactPage() {
             </div>
             <div className={styles.infoDetails}>
               <h3>Email Support</h3>
-              <p>info@jaibabatravels.com{"\n"}bookings@jaibabatravels.com</p>
+              <p>Jaibabatourandtravels@gmail.com{"\n"} </p>
             </div>
           </div>
 

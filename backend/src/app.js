@@ -4,6 +4,7 @@ import authRoutes from './routes/authRoutes.js';
 import tourRoutes from './routes/tourRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
+import messageRoutes from './routes/messageRoutes.js';
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/tours', tourRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/messages', messageRoutes);
 
 // 404 Route handler
 app.use((req, res, next) => {

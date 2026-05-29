@@ -9,9 +9,9 @@ dotenv.config();
 
 const users = [
   {
-    name: 'Admin User',
-    email: 'admin@jaibaba.com',
-    password: 'adminpassword', // Will be hashed by User model pre-save hook
+    name: 'Shubham Admin',
+    email: 'shubham@123456',
+    password: '009524', // Will be hashed by User model pre-save hook
     role: 'admin',
   },
   {

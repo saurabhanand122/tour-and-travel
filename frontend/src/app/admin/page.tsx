@@ -42,16 +42,28 @@ interface TourAdminType {
 
 export default function AdminPage() {
   const router = useRouter();
-  const { user, token, loading } = useAuth();
+  const { user, token, loading, login } = useAuth();
 
-  const [activeTab, setActiveTab] = useState<'bookings' | 'tours'>('bookings');
+  const [activeTab, setActiveTab] = useState<'bookings' | 'tours' | 'users' | 'reviews' | 'messages'>('bookings');
   
   // Lists State
   const [bookings, setBookings] = useState<BookingAdminType[]>([]);
   const [tours, setTours] = useState<TourAdminType[]>([]);
+  const [usersList, setUsersList] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [messages, setMessages] = useState<any[]>([]);
   
   const [loadingBookings, setLoadingBookings] = useState(true);
   const [loadingTours, setLoadingTours] = useState(true);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [loadingReviews, setLoadingReviews] = useState(true);
+  const [loadingMessages, setLoadingMessages] = useState(true);
+
+  // Admin login states
+  const [adminUsername, setAdminUsername] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
+  const [adminError, setAdminError] = useState('');
+  const [loggingInAdmin, setLoggingInAdmin] = useState(false);
 
   // Stats State
   const [stats, setStats] = useState({
@@ -75,16 +87,26 @@ export default function AdminPage() {
   const [tourExcluded, setTourExcluded] = useState('');
   const [submittingTour, setSubmittingTour] = useState(false);
 
-  // Security Check
-  useEffect(() => {
-    if (!loading) {
-      if (!user) {
-        router.push('/login');
-      } else if (user.role !== 'admin') {
-        router.push('/dashboard');
+  // Admin Custom Login handler
+  const handleAdminLoginSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAdminError('');
+    setLoggingInAdmin(true);
+
+    try {
+      const res = await login(adminUsername, adminPassword);
+      if (res.success) {
+        setAdminUsername('');
+        setAdminPassword('');
+      } else {
+        setAdminError(res.message || 'Invalid administrator credentials.');
       }
+    } catch (err) {
+      setAdminError('Failed to connect to authentication service.');
+    } finally {
+      setLoggingInAdmin(false);
     }
-  }, [user, loading, router]);
+  };
 
   // Fetch all Bookings
   const fetchBookings = async () => {
@@ -102,7 +124,6 @@ export default function AdminPage() {
       }
     } catch (err) {
       console.error('Failed to fetch bookings, using mock:', err);
-      // Load mock bookings
       loadMockBookings();
     } finally {
       setLoadingBookings(false);
@@ -122,7 +143,6 @@ export default function AdminPage() {
       }
     } catch (err) {
       console.error('Failed to fetch tours, using mock:', err);
-      // Load mock tours
       loadMockTours();
     } finally {
       setLoadingTours(false);
@@ -168,10 +188,99 @@ export default function AdminPage() {
     ]);
   };
 
+  // Fetch all Users
+  const fetchUsers = async () => {
+    if (!token) return;
+    setLoadingUsers(true);
+    try {
+      const res = await fetch(`${API_URL}/auth/users`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          setUsersList(data.data);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch users, using mock:', err);
+      loadMockUsers();
+    } finally {
+      setLoadingUsers(false);
+    }
+  };
+
+  // Fetch all Reviews
+  const fetchReviews = async () => {
+    if (!token) return;
+    setLoadingReviews(true);
+    try {
+      const res = await fetch(`${API_URL}/reviews`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          setReviews(data.data);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch reviews, using mock:', err);
+      loadMockReviews();
+    } finally {
+      setLoadingReviews(false);
+    }
+  };
+
+  // Fetch all Messages
+  const fetchMessages = async () => {
+    if (!token) return;
+    setLoadingMessages(true);
+    try {
+      const res = await fetch(`${API_URL}/messages`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          setMessages(data.data);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch messages, using mock:', err);
+      loadMockMessages();
+    } finally {
+      setLoadingMessages(false);
+    }
+  };
+
+  const loadMockUsers = () => {
+    setUsersList([
+      { _id: 'u1', name: 'John Doe', email: 'user@jaibaba.com', role: 'user', createdAt: new Date().toISOString() },
+      { _id: 'u2', name: 'Jane Smith', email: 'jane@example.com', role: 'user', createdAt: new Date().toISOString() },
+      { _id: 'u3', name: 'Shubham Admin', email: 'shubham@123456', role: 'admin', createdAt: new Date().toISOString() }
+    ]);
+  };
+
+  const loadMockReviews = () => {
+    setReviews([
+      { _id: 'r1', user: { name: 'John Doe', email: 'user@jaibaba.com' }, tour: { title: 'Swiss Alps Hiking & Scenic Railways' }, rating: 5, reviewText: 'Spectacular views and great hotels!', createdAt: new Date().toISOString() }
+    ]);
+  };
+
+  const loadMockMessages = () => {
+    setMessages([
+      { _id: 'm1', name: 'Alice Green', email: 'alice@example.com', subject: 'Custom itinerary query', message: 'Hello, I want to plan a custom trip to Japan for 12 days. Can you help?', createdAt: new Date().toISOString() }
+    ]);
+  };
+
   useEffect(() => {
     if (user && user.role === 'admin' && token) {
       fetchBookings();
       fetchTours();
+      fetchUsers();
+      fetchReviews();
+      fetchMessages();
     }
   }, [user, token]);
 
@@ -191,6 +300,133 @@ export default function AdminPage() {
       totalRevenue: totalRevenueSum,
     });
   }, [bookings, tours]);
+
+  // Delete Booking
+  const handleDeleteBooking = async (bookingId: string) => {
+    if (!confirm('Are you sure you want to delete this booking permanently?')) return;
+    try {
+      const res = await fetch(`${API_URL}/bookings/${bookingId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setBookings((prev) => prev.filter((b) => b._id !== bookingId));
+        alert('Booking deleted successfully.');
+      } else {
+        alert(data.message || 'Failed to delete booking.');
+      }
+    } catch (err) {
+      console.error(err);
+      setBookings((prev) => prev.filter((b) => b._id !== bookingId));
+      alert('Booking deleted locally in demonstration mode.');
+    }
+  };
+
+  // Update User Role
+  const handleUpdateUserRole = async (userId: string, currentRole: string) => {
+    const newRole = currentRole === 'admin' ? 'user' : 'admin';
+    if (userId === user?._id) {
+      alert('You cannot change your own admin role.');
+      return;
+    }
+    if (!confirm(`Are you sure you want to change this user's role to ${newRole}?`)) return;
+    try {
+      const res = await fetch(`${API_URL}/auth/users/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ role: newRole }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setUsersList((prev) =>
+          prev.map((u) => (u._id === userId ? { ...u, role: newRole } : u))
+        );
+        alert('User role updated successfully.');
+      } else {
+        alert(data.message || 'Failed to update user role.');
+      }
+    } catch (err) {
+      console.error(err);
+      setUsersList((prev) =>
+        prev.map((u) => (u._id === userId ? { ...u, role: newRole } : u))
+      );
+      alert('User role updated locally in demonstration mode.');
+    }
+  };
+
+  // Delete User
+  const handleDeleteUser = async (userId: string) => {
+    if (userId === user?._id) {
+      alert('You cannot delete your own administrator account.');
+      return;
+    }
+    if (!confirm('Are you sure you want to delete this user permanently?')) return;
+    try {
+      const res = await fetch(`${API_URL}/auth/users/${userId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setUsersList((prev) => prev.filter((u) => u._id !== userId));
+        alert('User deleted successfully.');
+      } else {
+        alert(data.message || 'Failed to delete user.');
+      }
+    } catch (err) {
+      console.error(err);
+      setUsersList((prev) => prev.filter((u) => u._id !== userId));
+      alert('User deleted locally in demonstration mode.');
+    }
+  };
+
+  // Delete Review
+  const handleDeleteReview = async (reviewId: string) => {
+    if (!confirm('Are you sure you want to delete this review permanently?')) return;
+    try {
+      const res = await fetch(`${API_URL}/reviews/${reviewId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setReviews((prev) => prev.filter((r) => r._id !== reviewId));
+        alert('Review deleted successfully.');
+      } else {
+        alert(data.message || 'Failed to delete review.');
+      }
+    } catch (err) {
+      console.error(err);
+      setReviews((prev) => prev.filter((r) => r._id !== reviewId));
+      alert('Review deleted locally in demonstration mode.');
+    }
+  };
+
+  // Delete Message
+  const handleDeleteMessage = async (messageId: string) => {
+    if (!confirm('Are you sure you want to delete this message permanently?')) return;
+    try {
+      const res = await fetch(`${API_URL}/messages/${messageId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setMessages((prev) => prev.filter((m) => m._id !== messageId));
+        alert('Message deleted successfully.');
+      } else {
+        alert(data.message || 'Failed to delete message.');
+      }
+    } catch (err) {
+      console.error(err);
+      setMessages((prev) => prev.filter((m) => m._id !== messageId));
+      alert('Message deleted locally in demonstration mode.');
+    }
+  };
 
   // Update Booking Status (Confirm / Cancel)
   const handleUpdateStatus = async (bookingId: string, newStatus: 'confirmed' | 'cancelled') => {
@@ -348,7 +584,58 @@ export default function AdminPage() {
     setTourExcluded('');
   };
 
-  if (loading || !user || user.role !== 'admin') return <div style={{ padding: '8rem 0' }}><Spinner /></div>;
+  if (loading) return <div style={{ padding: '8rem 0' }}><Spinner /></div>;
+
+  if (!user || user.role !== 'admin') {
+    return (
+      <div className={styles.adminLoginContainer}>
+        <div className={`${styles.adminLoginCard} glass-panel`}>
+          <div className={styles.adminLoginHeader}>
+            <h2>Admin Portal</h2>
+            <p>Access requires administrator authorization.</p>
+          </div>
+
+          {adminError && <div className={styles.errorBanner}>{adminError}</div>}
+
+          <form onSubmit={handleAdminLoginSubmit} className={styles.adminLoginForm}>
+            <div className={styles.formGroup}>
+              <label htmlFor="username">Username / Email</label>
+              <input
+                id="username"
+                type="text"
+                required
+                className="form-input"
+                placeholder="e.g. shubham@123456"
+                value={adminUsername}
+                onChange={(e) => setAdminUsername(e.target.value)}
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="password">Password</label>
+              <input
+                id="password"
+                type="password"
+                required
+                className="form-input"
+                placeholder="••••••"
+                value={adminPassword}
+                onChange={(e) => setAdminPassword(e.target.value)}
+              />
+            </div>
+
+            <button type="submit" className="btn-glow" disabled={loggingInAdmin} style={{ width: '100%' }}>
+              {loggingInAdmin ? 'Authorizing...' : 'Log In As Admin'}
+            </button>
+          </form>
+
+          <div className={styles.hintText}>
+            Hint: Use <strong>shubham@123456</strong> and password <strong>009524</strong>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`${styles.container} container`}>
@@ -403,11 +690,29 @@ export default function AdminPage() {
         >
           Manage Tours ({tours.length})
         </div>
+        <div 
+          className={`${styles.tab} ${activeTab === 'users' ? styles.tabActive : ''}`}
+          onClick={() => setActiveTab('users')}
+        >
+          Manage Users ({usersList.length})
+        </div>
+        <div 
+          className={`${styles.tab} ${activeTab === 'reviews' ? styles.tabActive : ''}`}
+          onClick={() => setActiveTab('reviews')}
+        >
+          Manage Reviews ({reviews.length})
+        </div>
+        <div 
+          className={`${styles.tab} ${activeTab === 'messages' ? styles.tabActive : ''}`}
+          onClick={() => setActiveTab('messages')}
+        >
+          User Messages ({messages.length})
+        </div>
       </div>
 
       {/* Main Tables */}
       <section className="glass-panel" style={{ padding: '0.25rem' }}>
-        {activeTab === 'bookings' ? (
+        {activeTab === 'bookings' && (
           loadingBookings ? (
             <Spinner />
           ) : bookings.length > 0 ? (
@@ -435,31 +740,37 @@ export default function AdminPage() {
                       <td style={{ fontWeight: 500 }}>{booking.tour?.title || 'Unknown Tour'}</td>
                       <td>{new Date(booking.bookAt).toLocaleDateString()}</td>
                       <td>{booking.guestSize}</td>
-                      <td style={{ fontWeight: 700, color: 'url(#)' }}>${booking.totalPrice}</td>
+                      <td style={{ fontWeight: 700, color: 'var(--text-primary)' }}>${booking.totalPrice}</td>
                       <td>
                         <span className={`badge badge-${booking.status}`}>
                           {booking.status}
                         </span>
                       </td>
                       <td>
-                        {booking.status === 'pending' ? (
-                          <div className={styles.actionGroup}>
-                            <button
-                              onClick={() => handleUpdateStatus(booking._id, 'confirmed')}
-                              className={`${styles.actionBtn} ${styles.actionBtnConfirm}`}
-                            >
-                              Confirm
-                            </button>
-                            <button
-                              onClick={() => handleUpdateStatus(booking._id, 'cancelled')}
-                              className={`${styles.actionBtn} ${styles.actionBtnCancel}`}
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        ) : (
-                          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>Reviewed</span>
-                        )}
+                        <div className={styles.actionGroup}>
+                          {booking.status === 'pending' && (
+                            <>
+                              <button
+                                onClick={() => handleUpdateStatus(booking._id, 'confirmed')}
+                                className={`${styles.actionBtn} ${styles.actionBtnConfirm}`}
+                              >
+                                Confirm
+                              </button>
+                              <button
+                                onClick={() => handleUpdateStatus(booking._id, 'cancelled')}
+                                className={`${styles.actionBtn} ${styles.actionBtnCancel}`}
+                              >
+                                Cancel
+                              </button>
+                            </>
+                          )}
+                          <button
+                            onClick={() => handleDeleteBooking(booking._id)}
+                            className={`${styles.actionBtn} ${styles.actionBtnCancel} ${styles.actionBtnDelete}`}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -469,7 +780,9 @@ export default function AdminPage() {
           ) : (
             <p style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>No traveler bookings found.</p>
           )
-        ) : (
+        )}
+
+        {activeTab === 'tours' && (
           loadingTours ? (
             <Spinner />
           ) : tours.length > 0 ? (
@@ -510,6 +823,148 @@ export default function AdminPage() {
             </div>
           ) : (
             <p style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>No tours in database catalog.</p>
+          )
+        )}
+
+        {activeTab === 'users' && (
+          loadingUsers ? (
+            <Spinner />
+          ) : usersList.length > 0 ? (
+            <div className={styles.tableWrapper}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email / Handle</th>
+                    <th>Role</th>
+                    <th>Joined At</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {usersList.map((usr) => (
+                    <tr key={usr._id}>
+                      <td style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{usr.name}</td>
+                      <td>{usr.email}</td>
+                      <td>
+                        <span className={`badge ${usr.role === 'admin' ? 'badge-confirmed' : 'badge-pending'}`}>
+                          {usr.role}
+                        </span>
+                      </td>
+                      <td>{new Date(usr.createdAt).toLocaleDateString()}</td>
+                      <td>
+                        <div className={styles.actionGroup}>
+                          <button
+                            onClick={() => handleUpdateUserRole(usr._id, usr.role)}
+                            className={styles.actionBtn}
+                            style={{ color: 'var(--accent-primary)', borderColor: 'var(--accent-primary-glow)' }}
+                            disabled={usr._id === user?._id}
+                          >
+                            Toggle Role
+                          </button>
+                          <button
+                            onClick={() => handleDeleteUser(usr._id)}
+                            className={`${styles.actionBtn} ${styles.actionBtnCancel} ${styles.actionBtnDelete}`}
+                            disabled={usr._id === user?._id}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>No users found in database.</p>
+          )
+        )}
+
+        {activeTab === 'reviews' && (
+          loadingReviews ? (
+            <Spinner />
+          ) : reviews.length > 0 ? (
+            <div className={styles.tableWrapper}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Reviewer</th>
+                    <th>Tour Package</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reviews.map((rev) => (
+                    <tr key={rev._id}>
+                      <td>
+                        <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{rev.user?.name || 'Deleted User'}</div>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{rev.user?.email || ''}</div>
+                      </td>
+                      <td style={{ fontWeight: 500 }}>{rev.tour?.title || 'Unknown Tour'}</td>
+                      <td style={{ fontWeight: 700, color: 'var(--accent-warning)' }}>★ {rev.rating}</td>
+                      <td style={{ maxWidth: '300px', wordBreak: 'break-word', fontSize: '0.85rem' }}>"{rev.reviewText}"</td>
+                      <td>{new Date(rev.createdAt).toLocaleDateString()}</td>
+                      <td>
+                        <button
+                          onClick={() => handleDeleteReview(rev._id)}
+                          className={`${styles.actionBtn} ${styles.actionBtnCancel} ${styles.actionBtnDelete}`}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>No traveler reviews found.</p>
+          )
+        )}
+
+        {activeTab === 'messages' && (
+          loadingMessages ? (
+            <Spinner />
+          ) : messages.length > 0 ? (
+            <div className={styles.tableWrapper}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Subject</th>
+                    <th>Message Details</th>
+                    <th>Submitted At</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {messages.map((msg) => (
+                    <tr key={msg._id}>
+                      <td style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{msg.name}</td>
+                      <td>{msg.email}</td>
+                      <td style={{ fontWeight: 600 }}>{msg.subject}</td>
+                      <td style={{ maxWidth: '350px', wordBreak: 'break-word', fontSize: '0.85rem' }}>{msg.message}</td>
+                      <td>{new Date(msg.createdAt).toLocaleString()}</td>
+                      <td>
+                        <button
+                          onClick={() => handleDeleteMessage(msg._id)}
+                          className={`${styles.actionBtn} ${styles.actionBtnCancel} ${styles.actionBtnDelete}`}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>No customer messages found.</p>
           )
         )}
       </section>

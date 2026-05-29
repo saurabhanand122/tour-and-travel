@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { Navbar } from "@/components/Navbar/Navbar";
 import { Footer } from "@/components/Footer/Footer";
 
@@ -18,9 +19,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Jai baba Tours &  Tour and Travels | Premium Travel Agency",
-  description: "Plan your next dream holiday with Jai baba Tours &  Tour and Travels. Explore handpicked holiday packages, custom itineraries, and make unforgettable memories.",
-  keywords: "tour packages, vacation, holidays, travel agency, Jai baba Tours &  Travels, booking, explore, tourism",
+  title: "Jai Baba Tour and Travels | Premium Travel Agency",
+  description: "Plan your next dream holiday with Jai Baba Tour and Travels. Explore handpicked holiday packages, custom itineraries, and make unforgettable memories.",
+  keywords: "tour packages, vacation, holidays, travel agency, Jai Baba Travels, booking, explore, tourism",
 };
 
 export default function RootLayout({
@@ -31,13 +32,15 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${outfit.variable} ${inter.variable}`}>
       <body style={{ minHeight: "100vh", display: "flex", flexDirection: "column", paddingTop: "80px" }}>
-        <AuthProvider>
-          <Navbar />
-          <main style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-            {children}
-          </main>
-          <Footer />
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <Navbar />
+            <main style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+              {children}
+            </main>
+            <Footer />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
