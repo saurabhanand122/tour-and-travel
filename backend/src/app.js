@@ -18,8 +18,7 @@ const defaultAllowedOrigins = [
   'https://tour-and-travel-64jb.vercel.app',
 ];
 
-const allowedOrigins = (process.env.FRONTEND_URL || defaultAllowedOrigins.join(','))
-  .split(',')
+const allowedOrigins = [...defaultAllowedOrigins, ...(process.env.FRONTEND_URL || '').split(',')]
   .map((origin) => origin.trim())
   .filter(Boolean);
 
