@@ -13,7 +13,12 @@ dotenv.config();
 const app = express();
 
 // Middlewares
-const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:3000')
+const defaultAllowedOrigins = [
+  'http://localhost:3000',
+  'https://tour-and-travel-64jb.vercel.app',
+];
+
+const allowedOrigins = (process.env.FRONTEND_URL || defaultAllowedOrigins.join(','))
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
