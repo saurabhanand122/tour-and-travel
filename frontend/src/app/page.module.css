@@ -392,3 +392,201 @@
     gap: 2.5rem;
   }
 }
+
+/* Owner & Fleet Section */
+.ownerFleetSection {
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.ownerFleetGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 3.5rem;
+  align-items: start;
+}
+
+.ownerCard {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  border-radius: var(--border-radius-lg);
+}
+
+.ownerImageWrapper {
+  position: relative;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  aspect-ratio: 4 / 5;
+}
+
+.ownerImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.ownerCard:hover .ownerImg {
+  transform: scale(1.05);
+}
+
+.ownerBadge {
+  position: absolute;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: var(--shadow-sm);
+}
+
+.ownerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ownerInfo h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.ownerRole {
+  font-size: 0.9rem;
+  color: var(--accent-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ownerInfo p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: 0.95rem;
+  margin: 0;
+  font-style: italic;
+}
+
+.ownerQuote {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid var(--accent-primary);
+  border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.fleetColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.fleetTitle {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  position: relative;
+  display: inline-block;
+}
+
+.fleetTitle::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  margin-top: 0.5rem;
+  border-radius: 2px;
+}
+
+.fleetGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.fleetCard {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-normal);
+}
+
+.fleetCard:hover {
+  transform: translateY(-5px);
+  border-color: var(--border-medium);
+  box-shadow: var(--shadow-lg);
+}
+
+.fleetImageWrapper {
+  overflow: hidden;
+  height: 180px;
+  position: relative;
+}
+
+.fleetImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.fleetCard:hover .fleetImg {
+  transform: scale(1.06);
+}
+
+.fleetDetails {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fleetDetails h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.fleetDetails p {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Responsiveness for Owner & Fleet */
+@media (max-width: 992px) {
+  .ownerFleetGrid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .ownerCard {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .fleetGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+

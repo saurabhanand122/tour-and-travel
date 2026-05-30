@@ -2,13 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import styles from './Navbar.module.css';
 
 export const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, loading } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
@@ -28,20 +29,20 @@ export const Navbar = () => {
   }, []);
 
   const closeMenu = () => setMenuActive(false);
+  const authReady = !loading;
 
   return (
     <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
       <div className={`${styles.container} container`}>
         <Link href="/" className={styles.logo} onClick={closeMenu}>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2L2 22L12 17L22 22L12 2Z" fill="url(#logo-grad)" stroke="url(#logo-grad)" strokeWidth="2" strokeLinejoin="round"/>
-            <defs>
-              <linearGradient id="logo-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#06b6d4" />
-                <stop offset="100%" stopColor="#3b82f6" />
-              </linearGradient>
-            </defs>
-          </svg>
+          <Image 
+            src="/images/logo.png" 
+            alt="Jai Baba Tours & Travels Logo" 
+            width={40} 
+            height={40} 
+            className={styles.logoImg}
+            priority
+          />
           <span>Jai baba Tours &  <span className={styles.logoHighlight}>TRAVELS</span></span>
         </Link>
 
@@ -69,6 +70,15 @@ export const Navbar = () => {
           </li>
           <li>
             <Link 
+              href="/about" 
+              className={`${styles.navLink} ${pathname === '/about' ? styles.active : ''}`}
+              onClick={closeMenu}
+            >
+              About Me
+            </Link>
+          </li>
+          <li>
+            <Link 
               href="/tours" 
               className={`${styles.navLink} ${pathname.startsWith('/tours') ? styles.active : ''}`}
               onClick={closeMenu}
@@ -86,7 +96,7 @@ export const Navbar = () => {
             </Link>
           </li>
 
-          {user && (
+          {authReady && user && (
             <li>
               <Link 
                 href={user.role === 'admin' ? '/admin' : '/dashboard'} 
@@ -121,7 +131,9 @@ export const Navbar = () => {
           </li>
 
           <li className={styles.authGroup}>
-            {user ? (
+            {!authReady ? (
+              <span className={styles.authPlaceholder} aria-hidden="true" />
+            ) : user ? (
               <>
                 <span className={styles.userName}>Hi, {user.name.split(' ')[0]}</span>
                 <button onClick={() => { logout(); closeMenu(); }} className={styles.logoutBtn}>

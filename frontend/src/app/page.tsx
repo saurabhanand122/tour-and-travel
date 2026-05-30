@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { TourCard, TourType } from '@/components/TourCard/TourCard';
 import { Spinner } from '@/components/Spinner/Spinner';
@@ -254,6 +255,125 @@ export default function Home() {
             <div className={styles.statCard}>
               <span className={styles.statNumber}>4.9/5</span>
               <span className={styles.statLabel}>Average Rating</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Meet Our Owner & Fleet Section */}
+      <section className={`${styles.section} ${styles.ownerFleetSection}`}>
+        <div className="container">
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionSubtitle}>Authentic Hospitality</span>
+            <h2 className={styles.sectionTitle}>Meet Our Owner & Fleet</h2>
+            <p className={styles.sectionText}>
+              We are proud to be a locally owned and operated travel agency. Meet Shubham Rao, our founder, and discover our premium vehicle fleet.
+            </p>
+          </div>
+
+          <div className={styles.ownerFleetGrid}>
+            {/* Owner Biography Card */}
+            <div className={`${styles.ownerCard} glass-panel`}>
+              <div className={styles.ownerImageWrapper}>
+                <Image 
+                  src="/images/owner_taj.jpg" 
+                  alt="Shubham Rao at Taj Mahal" 
+                  width={400} 
+                  height={500} 
+                  className={styles.ownerImg}
+                  loading="lazy"
+                />
+                <span className={styles.ownerBadge}>Owner & Chauffeur</span>
+              </div>
+              <div className={styles.ownerInfo}>
+                <h3>Shubham Rao</h3>
+                <span className={styles.ownerRole}>Founder & Lead Guide</span>
+                <p>
+                  "Welcome to Jai Baba Tours & Travels! Our goal is to make every journey in India safe, memorable, and filled with joy. We don't just sell packages; we offer a personal touch. I personally ensure that our vehicles are in top-notch condition and our guests receive warm hospitality throughout their journey."
+                </p>
+                <div className={styles.ownerQuote}>
+                  <span>🚗 Comfort. Safety. Unforgettable Memories.</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Fleet Showcase Grid */}
+            <div className={styles.fleetColumn}>
+              <h3 className={styles.fleetTitle}>Our Premium Travel Fleet</h3>
+              
+              <div className={styles.fleetGrid}>
+                {/* Scorpio SUV */}
+                <div className={`${styles.fleetCard} glass-panel`}>
+                  <div className={styles.fleetImageWrapper}>
+                    <Image 
+                      src="/images/owner_scorpio.jpg" 
+                      alt="Mahindra Scorpio SUV" 
+                      width={320} 
+                      height={200} 
+                      className={styles.fleetImg}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className={styles.fleetDetails}>
+                    <h4>Mahindra Scorpio SUV</h4>
+                    <p>Our rugged, spacious 7-seater SUV is perfect for family trips, mountain terrains, and high-speed highway cruising. Comfort meets high durability.</p>
+                  </div>
+                </div>
+
+                {/* Beach convertible */}
+                <div className={`${styles.fleetCard} glass-panel`}>
+                  <div className={styles.fleetImageWrapper}>
+                    <Image 
+                      src="/images/owner_beach_car.jpg" 
+                      alt="Premium Convertible Ride" 
+                      width={320} 
+                      height={200} 
+                      className={styles.fleetImg}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className={styles.fleetDetails}>
+                    <h4>Custom Open-Air Tours</h4>
+                    <p>For custom coastal rides and leisure beach-side trips, enjoy the wind in your hair with our special open-top custom cruises.</p>
+                  </div>
+                </div>
+
+                {/* Professional Driving */}
+                <div className={`${styles.fleetCard} glass-panel`}>
+                  <div className={styles.fleetImageWrapper}>
+                    <Image 
+                      src="/images/owner_driving.jpg" 
+                      alt="Experienced Chauffeur" 
+                      width={320} 
+                      height={200} 
+                      className={styles.fleetImg}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className={styles.fleetDetails}>
+                    <h4>Experienced Driving</h4>
+                    <p>All tours are driven by verified professionals (including the owner himself) with a deep knowledge of tourist destinations and safe route navigation.</p>
+                  </div>
+                </div>
+
+                {/* Night Scorpio */}
+                <div className={`${styles.fleetCard} glass-panel`}>
+                  <div className={styles.fleetImageWrapper}>
+                    <Image 
+                      src="/images/owner_scorpio_night.jpg" 
+                      alt="24/7 Road Support" 
+                      width={320} 
+                      height={200} 
+                      className={styles.fleetImg}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className={styles.fleetDetails}>
+                    <h4>24/7 Road Reliability</h4>
+                    <p>Equipped with modern tracking and round-the-clock roadside assistance support, ensuring complete safety and reliability during night journeys.</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

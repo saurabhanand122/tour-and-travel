@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './Footer.module.css';
 
 export const Footer = () => {
@@ -23,15 +24,13 @@ export const Footer = () => {
         {/* Brand Column */}
         <div className={styles.column}>
           <Link href="/" className={styles.logo} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 800, fontSize: '1.4rem', color: '#fff', fontFamily: 'var(--font-display)' }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 22L12 17L22 22L12 2Z" fill="url(#footer-logo-grad)" stroke="url(#footer-logo-grad)" strokeWidth="2" strokeLinejoin="round"/>
-              <defs>
-                <linearGradient id="footer-logo-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stopColor="#06b6d4" />
-                  <stop offset="100%" stopColor="#3b82f6" />
-                </linearGradient>
-              </defs>
-            </svg>
+            <Image 
+              src="/images/logo.png" 
+              alt="Jai Baba Tours & Travels Logo" 
+              width={36} 
+              height={36} 
+              style={{ borderRadius: '50%', border: '2px solid rgba(255, 255, 255, 0.2)' }}
+            />
             <span>Jai baba Tours &  TRAVELS</span>
           </Link>
           <p className={styles.brandDesc}>
@@ -55,6 +54,7 @@ export const Footer = () => {
           <h4>Quick Links</h4>
           <ul className={styles.linksList}>
             <li><Link href="/">Home</Link></li>
+            <li><Link href="/about">About Me</Link></li>
             <li><Link href="/tours">Tour Packages</Link></li>
             <li><Link href="/contact">Contact Us</Link></li>
             <li><Link href="/login">Login / Register</Link></li>
