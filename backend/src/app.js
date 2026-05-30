@@ -1,10 +1,14 @@
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
+import { connectDB } from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import tourRoutes from './routes/tourRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
+
+dotenv.config();
 
 const app = express();
 
@@ -32,6 +36,15 @@ app.use(express.urlencoded({ extended: true }));
 // Health Check Route
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Jai baba Tours &  Tour and Travels API' });
+});
+
+app.use('/api', async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 // Routes
